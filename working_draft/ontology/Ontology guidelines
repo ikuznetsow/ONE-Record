@@ -7,15 +7,16 @@ Following are a few guidelines on how to write the Data Model ontology to be com
 JOPA does not handle properply Restrictions that contain more than 3 lines. When defining the properties of a class the restrictions need to be split accordingly.
 
 For instance the following:
-
+///
 	[ rdf:type owl:Restriction ;
 		owl:onProperty address:country ;
 		owl:maxCardinality "1"^^xsd:nonNegativeInteger ;
 		owl:onClass :Country
 	]
-						 
-Should be written:
+///
 
+Should be written:
+///
 	[ rdf:type owl:Restriction ;
 		owl:onProperty address:country ;
 		owl:maxCardinality "1"^^xsd:nonNegativeInteger
@@ -24,6 +25,7 @@ Should be written:
 		owl:onProperty address:country ;
 		owl:onClass :Country
 	]
+///
 
 #########
 ### Defining cardinality restrictions for properties
@@ -32,7 +34,7 @@ Should be written:
 Protege defines cardinality in a different way than JOPA handles. maxQualifiedCardinality, minQualifiedCardinality and qualifiedCardinality should not be used. Only maxCardinality and minCardinality should be used.
 
 In case there is exactly one, or any other number, expected value(s) it should be written:
-
+///
 	[ rdf:type owl:Restriction ;
 		owl:onProperty address:country ;
 		owl:maxCardinality "1"^^xsd:nonNegativeInteger
@@ -41,3 +43,64 @@ In case there is exactly one, or any other number, expected value(s) it should b
 		owl:onProperty address:country ;
 		owl:minCardinality "1"^^xsd:nonNegativeInteger
 	]
+///
+
+#########
+### Defining maximum length for strings
+#########
+
+In Protege, one must use the Data Range Expression when defining the data property range
+Example: xsd:string[maxLength "5"]
+
+In the ontology a owl:withRestrictions needs to be used, as shown in example below
+///
+	rdfs:range [ rdf:type rdfs:Datatype ;
+		owl:onDatatype xsd:string ;
+		owl:withRestrictions ( [ xsd:maxLength "5"
+		 ]
+		)
+		] ;
+	...
+///
+
+#########
+### Defining maximum length for numbers
+#########
+
+The equivalent of maxLength for number would be the min/maxInclusive (below or equal to) or min/maxExclusive (strictly below) with "9x" 
+
+In Protege, one must use the Data Range Expression when defining the data property range
+Example: xsd:string[maxInclusive "5"]
+
+In the ontology a owl:withRestrictions needs to be used, as shown in example below
+///
+	rdfs:range [ rdf:type rdfs:Datatype ;
+		owl:onDatatype xsd:string ;
+		owl:withRestrictions ( [ xsd:maxLength "5"
+		 ]
+		)
+		] ;
+	...
+///
+
+
+
+#########
+### Defining a pattern, e.g. alphanmerical format
+#########
+
+The 'pattern' as a Restriction can be used to define a specific format based on the regular expression principle
+
+In Protege, one must use the Data Range Expression when defining the data property range
+Example: xsd:string[pattern "[a-zA-Z0-9]"]
+
+In the ontology a owl:withRestrictions needs to be used, as shown in example below
+///
+	[ rdf:type rdfs:Datatype ;
+		owl:onDatatype xsd:string ;
+		owl:withRestrictions ( [ xsd:pattern "[a-zA-Z0-9]"
+		]
+		)
+		] ;
+	...
+///
